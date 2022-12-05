@@ -9,7 +9,6 @@ def main():
         line = fin.readline()
         while line != "\n":
             count = 1
-            inc_val = 0
             for elem in line:
                 # NOTE: this builds our crate piles so that the first value for
                 # each key is going to be the top of the pile!
@@ -53,10 +52,10 @@ def main():
 
         # "move quantity from colA to colB"
         line = fin.readline().split()
-        counter = 0
+        #counter = 0
         while line:
-            if counter == 10:
-                pass
+            #if counter == 10:
+                #pass
                 #return
             #print(f"{line}")
             x = int(line[1])
