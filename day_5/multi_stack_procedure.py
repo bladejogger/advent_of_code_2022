@@ -13,36 +13,12 @@ def main():
                 # NOTE: this builds our crate piles so that the first value for
                 # each key is going to be the top of the pile!
                 if elem.isalpha():
-                    # this 2 throws off the formula cause i'm dumb
-                    if count == 2:
-                        if '1'  not in columns.keys():
-                            columns['1'] = []
-                        columns['1'] += [elem]
-                    else:
-                        # there is a gap of 4 characters between each crate
-                        # value consumed.  the correlation between column
-                        # number(col_num) and characters consumed(count) can be
-                        # described as:
-                        # count = col_num x 3 + inc_val
-                        # where inc_val starts at 0 and increases by 1 for
-                        # every new column
-                        # to calculate which col_num the found value goes into
-                        # based off the count, we need a formula which
-                        # converts 6 to a inc_val of 0:
-                        # 6-6 = 0     ez pz
-                        # and 10 to a inc_val of 1, and so on:
-                        # 10-6 = 4/4 = 1
-                        # 14-6 = 8/4 = 2
-                        inc_val = (count - 6) / 4
-                        # so now we have both count and inc_val, and order of
-                        # operations follows naturally to reverse our
-                        # correlation formula
-                        col_num  = (count - inc_val) / 3
-                        # reminder: division makes a float
-                        z = str(int(col_num))
-                        if z not in columns.keys():
-                            columns[z] = []
-                        columns[z] += [elem]
+                    # column number and char count increase linearly like so:
+                    # col_num = count/4 + 1/2
+                    z = str(int((.25 * count) + .5))
+                    if z not in columns.keys():
+                        columns[z] = []
+                    columns[z] += [elem]
                 count += 1
             line = fin.readline()
 
