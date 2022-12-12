@@ -69,7 +69,7 @@ def main():
                         cur_col += 1
                     # if any directional flag is still false, then that tree is
                     # visible from that direction
-                    if up_flag or dn_flag or lt_flag or rt_flag:
+                    if not up_flag or not dn_flag or not lt_flag or not rt_flag:
                         answer += 1
 
                 column_index += 1
