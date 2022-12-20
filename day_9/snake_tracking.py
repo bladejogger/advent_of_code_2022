@@ -1,70 +1,37 @@
 FIN = "motion_paths.txt"
 
-SPOTS_VISITED = []
-snake = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0],\
+DPAD = {'U': [0, 1], 'D': [0, -1], 'R': [1, 0], 'L': [-1, 0]}
+SNAKE = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0],\
         [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+SPOTS_VISITED = [[0, 0]]
 
 def coord_check():
-    if snake[9] not in SPOTS_VISITED:
-        SPOTS_VISITED.append(snake[9].copy())
+    if SNAKE[9] not in SPOTS_VISITED:
+        SPOTS_VISITED.append(SNAKE[9].copy())
 
-def move_snake():
-    for count in range(0, 9):
-        # vert
-        if abs(snake[count][1] - snake[count + 1][1]) > 1:
-            snake[count + 1][0] = snake[count][0]
-            # up
-            if snake[count][1] > snake[count + 1][1]:
-                snake[count + 1][1] += 1
-            # down
-            else:
-                snake[count + 1][1] -= 1
-        # horiz
-        elif abs(snake[count][0] - snake[count + 1][0]) > 1:
-            # right
-            if snake[count][0] > snake[count + 1][0]:
-                snake[count + 1][0] += 1
-            # left
-            else:
-                snake[count + 1][0] -= 1
-            snake[count + 1][1] = snake[count][1]
-        else:
-            return
-
+def move_snake(direction, distance):
+    global SNAKE
+    for i in range(0, int(distance)):
+        SNAKE[0][0] += DPAD[direction][0]
+        SNAKE[0][1] += DPAD[direction][1]
+    
+        for elem in range(0, 9):
+            x_diff = abs(SNAKE[elem][0] - SNAKE[elem + 1][0])
+            y_diff = abs(SNAKE[elem][1] - SNAKE[elem + 1][1])
+            if x_diff > 1 or y_diff > 1:
+                if direction == 'U' or direction == 'D':
+                    SNAKE[elem + 1][0] = SNAKE[elem][0]
+                    SNAKE[elem + 1][1] += DPAD[direction][1]
+                else:
+                    SNAKE[elem + 1][0] += DPAD[direction][0]
+                    SNAKE[elem + 1][1] = SNAKE[elem][1]
+        coord_check()
+    
 def main():
     with open(FIN) as fin:
         line = fin.readline().strip('\n').split()
         while line:
-            dist = int(line[1])
-            match line[0]:
-                # up
-                case 'U':
-                    while dist > 0:
-                        dist -= 1
-                        snake[0][1] += 1
-                        move_snake()
-                # down
-                case 'D':
-                    while dist > 0:
-                        dist -= 1
-                        snake[0][1] -= 1
-                        move_snake()
-                # right
-                case 'R':
-                    while dist > 0:
-                        dist -= 1
-                        snake[0][0] += 1
-                        move_snake()
-                # left
-                case 'L':
-                    while dist > 0:
-                        dist -= 1
-                        snake[0][0] -= 1
-                case _:
-                    print("ruh roh!\nerror: '{line[0]} {line[1]}'")
-                    return
-            coord_check()
-
+            move_snake(line[0], line[1]);
             line = fin.readline().strip('\n').split()
 
     print(f"answer: {len(SPOTS_VISITED)}")
