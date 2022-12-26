@@ -9,41 +9,40 @@ def coord_check():
     if SNAKE[9] not in SPOTS_VISITED:
         SPOTS_VISITED.append(SNAKE[9].copy())
 
-def move_snake(direction, distance):
-    global SNAKE
+def move_snake(direction):
+    for i in range(1, 10):
+        x_diff = abs(SNAKE[i][0] - SNAKE[i - 1][0])
+        y_diff = abs(SNAKE[i][1] - SNAKE[i - 1][1])
+        if x_diff > 1 or y_diff > 1:
+            if direction == 'U' or direction == 'D':
+                if SNAKE[i][0] != SNAKE[i - 1][0]:
+                    SNAKE[i][0] += int((SNAKE[i - 1][0] - SNAKE[i][0]) / 2)
+                SNAKE[i][1] += DPAD[direction][1]
+            elif direction == 'R' or direction == 'L':
+                if SNAKE[i][1] != SNAKE[i - 1][1]:
+                    SNAKE[i][1] += int((SNAKE[i - 1][1] - SNAKE[i][1]) / 2)
+                SNAKE[i][0] += DPAD[direction][0]
+        else:
+            break
+
+    coord_check()
+
+
+def move_head(direction, distance):
     for i in range(0, int(distance)):
         SNAKE[0][0] += DPAD[direction][0]
         SNAKE[0][1] += DPAD[direction][1]
-    
-        for elem in range(0, 9):
-            x_diff = abs(SNAKE[elem][0] - SNAKE[elem + 1][0])
-            y_diff = abs(SNAKE[elem][1] - SNAKE[elem + 1][1])
-            if x_diff > 1 or y_diff > 1:
-                if direction == 'U' or direction == 'D':
-                    SNAKE[elem + 1][0] = SNAKE[elem][0]
-                    SNAKE[elem + 1][1] += DPAD[direction][1]
-                else:
-                    SNAKE[elem + 1][0] += DPAD[direction][0]
-                    SNAKE[elem + 1][1] = SNAKE[elem][1]
-        coord_check()
-    
+        move_snake(direction)
+
+
 def main():
     with open(FIN) as fin:
         line = fin.readline().strip('\n').split()
         while line:
-            move_snake(line[0], line[1]);
+            move_head(line[0], line[1])
             line = fin.readline().strip('\n').split()
 
     print(f"answer: {len(SPOTS_VISITED)}")
 
 if __name__ == "__main__":
     main()
-
-# 1241 - no res
-# 1500 - too low
-# 1519 - too low
-# 1958 - no res 
-# 2380 - no res
-# 2430 - too high
-# 2670 - no res
-# 2841 - too high
