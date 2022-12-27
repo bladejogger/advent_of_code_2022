@@ -15,25 +15,21 @@ def move_snake(direction):
         y_diff = abs(SNAKE[i][1] - SNAKE[i - 1][1])
         if x_diff > 1 or y_diff > 1:
             if direction == 'U' or direction == 'D':
-                if SNAKE[i][0] != SNAKE[i - 1][0]:
-                    SNAKE[i][0] += int((SNAKE[i - 1][0] - SNAKE[i][0]) / 2)
+                SNAKE[i][0] += int((SNAKE[i - 1][0] - SNAKE[i][0]) / 2)
                 SNAKE[i][1] += DPAD[direction][1]
             elif direction == 'R' or direction == 'L':
-                if SNAKE[i][1] != SNAKE[i - 1][1]:
-                    SNAKE[i][1] += int((SNAKE[i - 1][1] - SNAKE[i][1]) / 2)
                 SNAKE[i][0] += DPAD[direction][0]
+                SNAKE[i][1] += int((SNAKE[i - 1][1] - SNAKE[i][1]) / 2)
         else:
             break
 
     coord_check()
-
 
 def move_head(direction, distance):
     for i in range(0, int(distance)):
         SNAKE[0][0] += DPAD[direction][0]
         SNAKE[0][1] += DPAD[direction][1]
         move_snake(direction)
-
 
 def main():
     with open(FIN) as fin:
